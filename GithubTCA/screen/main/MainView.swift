@@ -10,14 +10,26 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MainView: View {
+    
+    let store: StoreOf<MainCore>
+    
     var body: some View {
         contents
-            
+            .onAppear {
+                store.send(.onAppear)
+            }
+            .fullScreenCover(
+                store: store.scope(
+                    state: \.$destination,
+                    action: MainCore.Action.destination ),
+                state: /MainCore.Destination.State.loginView,
+                action: MainCore.Destination.Action.loginView
+            ) { LoginView(store: $0) }
     }
     
     @ViewBuilder
     var contents: some View {
-        Text("abc")
+        Text("Main")
     }
     
 }

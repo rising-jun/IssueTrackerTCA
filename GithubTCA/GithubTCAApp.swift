@@ -10,12 +10,17 @@ import ComposableArchitecture
 
 @main
 struct GithubTCAApp: App {
+    private var mainStore = Store(
+        initialState: MainCore.State(),
+        reducer: MainCore()
+    )
+    
     var body: some Scene {
         WindowGroup {
-            LoginView(store: Store(initialState: Login.State()) {
-                Login()
-            }).onOpenURL { url in
-                print("opended url \(url)")
+            MainView(store: mainStore)
+                .onOpenURL { url in
+                    let code = url.absoluteString.components(separatedBy: "code=").last ?? ""
+                    ViewStore(mainStore).send(.receiveCode(code))
             }
         }
     }

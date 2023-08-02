@@ -12,7 +12,8 @@ struct LoginView: View {
     @State var id: String = ""
     @State var password: String = ""
     
-    let store: StoreOf<Login>
+    let store: StoreOf<LoginCore>
+    
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack(alignment: .top) {
@@ -85,8 +86,8 @@ func textInputView(title: String, value: Binding<String>) -> some View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(store: Store(initialState: Login.State()) {
-            Login()
+        LoginView(store: Store(initialState: LoginCore.State()) {
+            LoginCore()
         })
     }
 }
