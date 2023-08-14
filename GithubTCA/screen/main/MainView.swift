@@ -29,7 +29,19 @@ struct MainView: View {
     
     @ViewBuilder
     var contents: some View {
-        Text("Main")
+        TabView {
+            IfLetStore(
+                store.scope(
+                    state: \.$destination,
+                    action: MainCore.Action.destination
+                ),
+                state: /MainCore.Destination.State.listView,
+                action: MainCore.Destination.Action.listView) {
+                    ListView(store: $0)
+                }
+                .tabItem {
+                    Text("List")
+                }
+        }
     }
-    
 }

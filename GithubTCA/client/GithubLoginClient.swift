@@ -10,7 +10,7 @@ import Dependencies
 
 struct GithubLoginClient {
     var getURL: () -> URL?
-    var exchangeTokenByCode: (String) -> String
+    var exchangeTokenByCode: (String) async throws -> String
 }
 extension GithubLoginClient: DependencyKey {
     static var liveValue = GithubLoginClient {
@@ -25,8 +25,13 @@ extension GithubLoginClient: DependencyKey {
         ]
         return components.url
     } exchangeTokenByCode: { code in
-        
-        return ""
+        let api = GithubAPI.exchangeToken(code)
+        var urlRequest = URLRequest(url: api.baseURL)
+        urlRequest.httpBody = api.parameterValue
+        urlRequest.httpMethod = api.method.value
+        let data = try await URLSession.shared.data(for: urlRequest).0
+        let token: Token = try api.decodeJSON(type: Token.self, from: data)
+        return token.accessToken
     }
 }
 
