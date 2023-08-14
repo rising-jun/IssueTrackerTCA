@@ -9,7 +9,7 @@ import ComposableArchitecture
 import Dependencies
 import Foundation
 
-struct Login: ReducerProtocol {
+struct LoginCore: ReducerProtocol {
     
     struct State: Equatable { }
     
@@ -40,9 +40,4 @@ struct Login: ReducerProtocol {
             }
         }
     }
-}
-
-struct LoginInfo: Equatable {
-    let id: String
-    let password: String
 }
